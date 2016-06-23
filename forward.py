@@ -19,8 +19,8 @@ CLASSES = ('__background__',
 PIXEL_MEANS = np.array([[[102.9801, 115.9465, 122.7717]]])
 
 
-def get_model():
-    model = FasterRCNN()
+def get_model(gpu):
+    model = FasterRCNN(gpu)
     model.train = False
     serializers.load_npz('VGG16_faster_rcnn_final.model', model)
 
@@ -74,7 +74,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     xp = chainer.cuda.cupy if chainer.cuda.available and args.gpu >= 0 else np
-    model = get_model()
+    model = get_model(gpu=args.gpu)
     if chainer.cuda.available and args.gpu >= 0:
         model.to_gpu(args.gpu)
 
